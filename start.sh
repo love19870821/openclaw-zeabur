@@ -2,7 +2,7 @@
 set -e
 
 # 確保 state 目錄存在
-mkdir -p "${OPENCLAW_STATE_DIR:-/home/node/.openclaw}"
+mkdir -p "${OPENCLAW_STATE_DIR:-/data/openclaw}"
 
 echo "Starting OpenClaw Gateway..."
 echo "PORT=${PORT:-8080}"
