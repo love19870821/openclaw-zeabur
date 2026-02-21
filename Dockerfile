@@ -1,23 +1,28 @@
-FROM node:20-slim
+FROM node:22-slim
+LABEL "language"="nodejs"
 
-# ✅ 安裝 git（解決 npm spawn git 失敗）
-RUN apt-get update && \
-    apt-get install -y git && \
-    rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
-# ✅ 安裝最新 openclaw
+# 安裝必要的系統依賴
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# 複製應用文件
+COPY . .
+
+# 安裝依賴
 RUN npm install -g openclaw@latest --unsafe-perm
 
-# 建立非 root 使用者（穩定營運）
-RUN useradd -m -u 1000 nodeuser
-USER nodeuser
-ENV HOME=/home/nodeuser
+# 使用現有用戶而不是創建新用戶，或使用不同的 UID
+RUN useradd -m -u 1001 nodeuser || true
 
-# OpenClaw 設定
-ENV OPENCLAW_STATE_DIR=/home/nodeuser/.openclaw
-ENV OPENCLAW_WORKSPACE_DIR=/home/nodeuser/.openclaw/workspace
-ENV OPENCLAW_GATEWAY_PORT=18789
+# 設置工作目錄權限
+RUN chown -R 1001:1001 /app
 
-EXPOSE 18789
+USER 1001
 
-CMD ["openclaw", "gateway"]
+EXPOSE 8080
+
+CMD ["openclaw"]
