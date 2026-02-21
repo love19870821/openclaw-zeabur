@@ -17,4 +17,4 @@ RUN chown -R 1001:1001 /app
 USER 1001  
 EXPOSE 8080  
 # 啟動 OpenClaw Gateway 服務  
-CMD ["openclaw", "gateway", "--port", "8080"]  
+CMD ["sh", "-lc", "openclaw gateway --bind lan --port ${PORT:-8080}"]  
