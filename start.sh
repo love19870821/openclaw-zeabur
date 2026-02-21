@@ -15,4 +15,4 @@ echo "[boot] state_dir=$STATE_DIR"
 P="${PORT:-8080}"
 echo "[boot] starting gateway on 0.0.0.0:${P}"
 
-exec openclaw gateway --bind lan --port "$P"
+exec openclaw gateway --bind lan --port "$P" --allow-unconfigured
